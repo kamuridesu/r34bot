@@ -1,0 +1,31 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  deploy:
+    name: "Deploy to aws"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && 'refs/head/master'
+    steps:
+      - name: "Configure SSH key"
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SERVER_SSH_KEY" > ~/.ssh/aws
+          chmod 600 ~/.ssh/aws
+          cat >>~/.ssh/config <<END
+          Host kamuridesu.tech
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
+        env:
+            SSH_USER: ${{ secrets.STAGING_SSH_USER }}
+            SSH_KEY: ${{ secrets.SSH_USER }}
+            SSH_HOST: ${{ secrets.SSH_HOST }}
+        
+      - name: "Update repository"
+        run: ssh kamuridesu.tech "git clone https://github.com/kamuridesu/r34bot.git || cd r34bot && git pull && cd .."
+      - name: "Build image"
+        run: ssh kamuridesu.tech "cd r34bot; sudo docker build -t r34bot ."
+      - name: "Deploy new version"
+        run: ssh kamuridesu.tech "sudo docker rm -f r34bot; sudo docker run --name r34bot -d r34bot"
