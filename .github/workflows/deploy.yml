@@ -14,18 +14,17 @@ jobs:
           cat >>~/.ssh/config <<END
           Host kamuridesu.tech
             HostName kamuridesu.tech
-            User $SSH_USER
+            User admin
             IdentityFile ~/.ssh/aws
             StrictHostKeyChecking no
           END
         env:
-            SSH_USER: ${{ secrets.SSH_USER }}
             SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
             SSH_HOST: ${{ secrets.SSH_HOST }}
         
       - name: "Update repository"
-        run: ssh ${{ secrets.SSH_USER }}@kamuridesu.tech "git clone https://github.com/kamuridesu/r34bot.git || cd r34bot && git pull && cd .."
+        run: ssh admin@kamuridesu.tech "git clone https://github.com/kamuridesu/r34bot.git || cd r34bot && git pull && cd .."
       - name: "Build image"
-        run: ssh ${{ secrets.SSH_USER }}@kamuridesu.tech "cd r34bot; sudo docker build -t r34bot ."
+        run: ssh admin@kamuridesu.tech "cd r34bot; sudo docker build -t r34bot ."
       - name: "Deploy new version"
-        run: ssh ${{ secrets.SSH_USER }}@kamuridesu.tech "sudo docker rm -f r34bot; sudo docker run --name r34bot -d r34bot"
+        run: ssh admin@kamuridesu.tech "sudo docker rm -f r34bot; sudo docker run --name r34bot -d r34bot"
