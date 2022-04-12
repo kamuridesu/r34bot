@@ -22,7 +22,7 @@ def argsparser(message):
 		if "=" in x:
 			arg = x.split("=")
 			args[arg[0]] = arg[1]
-		else:
+		elif x not in [" ", ""]:
 			query.append(x)
 	return {
 		"query": " ".join(query),
