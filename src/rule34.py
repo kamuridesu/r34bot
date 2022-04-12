@@ -1,6 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 from typing import Generator
+try:
+	from helpers import Logger
+except:
+	from .helpers import Logger
 
 
 class Rule34Paheal:
