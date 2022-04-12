@@ -25,7 +25,7 @@ jobs:
       - name: "Update repository"
         run: ssh admin@kamuridesu.tech "git clone https://github.com/kamuridesu/r34bot.git || cd r34bot && git pull && cd .."
       - name: "Add token"
-        run: ssh admin@kamuridesu.tech "echo '{\"TELEGRAM_BOT_TOKEN\": \"${{ secrets.TOKEN }}\"}' > /home/admin/r34bot/tokens.json"
+        run: ssh admin@kamuridesu.tech "echo ${{ secrets.TOKEN }} > /home/admin/r34bot/tokens.json"
       - name: "Build image"
         run: ssh admin@kamuridesu.tech "cd r34bot; sudo docker build -t r34bot ."
       - name: "Deploy new version"
