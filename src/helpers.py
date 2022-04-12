@@ -8,7 +8,7 @@ class Logger:
 
 	def save(self, content: str) -> bool:
 		arg = "w"
-		if os.path.isfile(filename):
+		if os.path.isfile(self.filename):
 			arg = "a"
 		with open(self.filename, arg) as f:
 			f.write(content)

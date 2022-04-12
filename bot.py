@@ -15,6 +15,7 @@ TOKEN = json.loads((pathlib.Path(__file__).parent.absolute() / "tokens.json").re
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
+
 def argsparser(message):
 	args = {}
 	query = []
@@ -32,7 +33,7 @@ def argsparser(message):
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
-	await message.reply("Olá! Use /hentai (tag) [options] para baixar hentai. Em tag, utilize tags do rule34.paheal.net, e em options, use per_page= e pages= para definir a quantidade, ex: /hentai porkyman pages=1 per_page=2")
+	await message.reply("Olá! Use /hentai (tag) [options] para baixar hentai.\nEm tag, utilize tags do rule34.paheal.net, e em options, use per_page= e pages= para definir a quantidade\nEx: /hentai porkyman pages=1 per_page=2")
 
 
 @dp.message_handler(commands=["hentai"])
@@ -42,6 +43,7 @@ async def hentai(message: types.Message):
 	query_args = argsparser(message.text.split(" ")[1:])
 	query = query_args['query']
 	args = query_args['args']
+	logger.info("Searching for " + query)
 	sending = False
 	if "per_page" not in args:
 		args.update({"per_page": 1})
