@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+import json
 
 
 class Logger:
@@ -22,3 +23,22 @@ class Logger:
 		out = datetime.now().strftime("%Y/%m/%d %H:%M:%S") + " [ERROR] " + content
 		print(out, flush=True)
 		self.save(out)
+
+
+def jsonify_quotes(filename):
+	with open(filename, "r") as f:
+		x = f.read()
+		y = x.split(": ")
+		name = y[0]
+		token = y[1]
+		return {
+			name.split("{")[1].strip(): token.split("}")[0].strip()
+		}
+
+
+def load(filename):
+	try:
+		with open(filename, "r") as f:
+			return json.loads(f.read())
+	except:
+		return jsonify_quotes(filename)

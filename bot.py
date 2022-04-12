@@ -3,14 +3,14 @@ import json
 import pathlib
 try:
 	from src import Rule34Paheal
-	from src import Logger
+	from src import Logger, jsonify_quotes, load
 except:
 	from .src import Rule34Paheal
-	from .src import Logger
+	from .src import Logger, jsonify_quotes, load
 import requests
 
 logger = Logger("bot.log")
-TOKEN = json.loads((pathlib.Path(__file__).parent.absolute() / "tokens.json").read_text(encoding="utf-8"))['TELEGRAM_BOT_TOKEN']
+TOKEN = load("tokens.json")['TELEGRAM_BOT_TOKEN']
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
