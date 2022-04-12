@@ -3,7 +3,7 @@ import json
 import pathlib
 try:
 	from src import Rule34Paheal
-	from helpers import Logger
+	from src import Logger
 except:
 	from .src import Rule34Paheal
 	from .src import Logger
