@@ -34,7 +34,7 @@ def argsparser(message):
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
-	await message.reply("Olá! Use /hentai (tag) [options] para baixar hentai.\nEm tag, utilize tags do rule34.paheal.net, e em options, use per_page= e pages= para definir a quantidade\nEx: /hentai porkyman pages=1 per_page=2")
+	await message.reply("Olá! Use /hentai (tag) [options] para baixar hentai.\nEm tag, utilize tags do rule34.paheal.net, e em options, use per_page= e pages= para definir a quantidade\nEx: /hentai porkyman pages=1 per_page=2\n\nUse /search para pesquisar por alguma tag, como:\n/search porkyman")
 
 
 @dp.message_handler(commands=["hentai"])
