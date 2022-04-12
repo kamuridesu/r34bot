@@ -61,7 +61,7 @@ class Rule34Paheal:
 				exists_all = False
 		return exists_all
 
-	def search(self, query: str, pages_to_get: int = 1) -> list:
+	def get_wpage(self, query: str, pages_to_get: int = 1) -> list:
 		pages_to_get = int(pages_to_get)
 		if self.check_if_exists(query) is False:
 			return False
@@ -77,7 +77,7 @@ class Rule34Paheal:
 			actual_page += 1
 
 	def get_content(self, query: str, **kwargs) -> Generator[str, None, None]:
-		fetched_content = self.search(query, kwargs['pages'])
+		fetched_content = self.get_wpage(query, kwargs['pages'])
 		per_page = int(kwargs['per_page'])
 		content = []
 		for x in fetched_content:
