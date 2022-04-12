@@ -23,7 +23,7 @@ jobs:
             SSH_HOST: ${{ secrets.SSH_HOST }}
         
       - name: "Update repository"
-        run: ssh admin@kamuridesu.tech "git clone https://github.com/kamuridesu/r34bot.git || cd r34bot && git pull && cd .."
+        run: ssh admin@kamuridesu.tech "rm -rf r34bot; git clone https://github.com/kamuridesu/r34bot.git"
       - name: "Add token"
         run: ssh admin@kamuridesu.tech 'echo "${{ secrets.TOKEN }}" > /home/admin/r34bot/tokens.json'
       - name: "Build image"
