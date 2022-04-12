@@ -42,15 +42,16 @@ class Rule34Paheal:
 		response = requests.get(url)
 		if response.status_code == 200:
 			content = response.json()
-			if content:
-				total_content = int(content[list(content.keys())[0]])
-				total_pages = total_content // 70
-				if total_content % 70 != 0:
-					total_pages += 1
-				return {
-					"total_pages": total_pages,
-					"canon_name": list(content.keys())[0]
-				}
+			if content: return content
+			# if content:
+			# 	total_content = int(content[list(content.keys())[0]])
+			# 	total_pages = total_content // 70
+			# 	if total_content % 70 != 0:
+			# 		total_pages += 1
+			# 	return {
+			# 		"total_pages": total_pages,
+			# 		"canon_name": list(content.keys())[0]
+			# 	}
 		return False
 
 	def check_if_exists(self, query: str) -> str:
@@ -89,8 +90,14 @@ class Rule34Paheal:
 					content = []
 					break
 
+	def search(self, query: str) -> list:
+		results = self.checker(query)
+		return (results if results else False)
+
+
 
 # r34 = Rule34Paheal()
+# print(r34.search("hildaaspid"))
 # # # r34.check_if_exists("hilda")
 # x = r34.get_content("tuber porkyman", **{"pages": 1, "per_page": 70})
 # print(x)

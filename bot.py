@@ -14,6 +14,7 @@ TOKEN = json.loads((pathlib.Path(__file__).parent.absolute() / "tokens.json").re
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
+r34 = Rule34Paheal()
 
 
 def argsparser(message):
@@ -38,8 +39,6 @@ async def start(message: types.Message):
 
 @dp.message_handler(commands=["hentai"])
 async def hentai(message: types.Message):
-	r34 = Rule34Paheal()
-	query = "".join(message.text.split(" ")[1:][0])
 	query_args = argsparser(message.text.split(" ")[1:])
 	query = query_args['query']
 	args = query_args['args']
@@ -58,6 +57,19 @@ async def hentai(message: types.Message):
 			except:
 				logger.error("Erro ao baixar conteúdo da url " + x['url'])
 	await message.reply("OK!" if sending else "Não encontrado!")
+
+
+@dp.message_handler(commands=['search'])
+async def search(message: types.Message):
+	query = "".join(message.text.split(" ")[1:][0])
+	if query:
+		results = r34.search(query)
+		if results:
+			response = "\n".join(list(results.keys()))
+			return await message.reply(response)
+		return await message.reply("Nada encontrado!")
+
+
 
 if __name__ == "__main__":
 	executor.start_polling(dp, skip_updates=True)

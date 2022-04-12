@@ -11,14 +11,14 @@ class Logger:
 		if os.path.isfile(self.filename):
 			arg = "a"
 		with open(self.filename, arg) as f:
-			f.write(content)
+			f.write(str(content) + "\n")
 
 	def info(self, content: str) -> None:
 		out = datetime.now().strftime("%Y/%m/%d %H:%M:%S") + " [INFO] " + content
-		print(out)
+		print(out, flush=True)
 		self.save(out)
 
 	def error(self, content: str) -> None:
 		out = datetime.now().strftime("%Y/%m/%d %H:%M:%S") + " [ERROR] " + content
-		print(out)
+		print(out, flush=True)
 		self.save(out)
