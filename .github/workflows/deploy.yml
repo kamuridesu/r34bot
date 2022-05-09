@@ -22,7 +22,7 @@ jobs:
             SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
         
       - name: "Update repository"
-        run: ssh admin@kamuridesu.tech "rm -rf ${{ github.event.repository.name }}; git clone ${{ github.repositoryUrl }}"
+        run: ssh admin@kamuridesu.tech "rm -rf ${{ github.event.repository.name }}; git clone $(${{ github.repositoryUrl }}/git/https)"
       - name: "Add token"
         run: ssh admin@kamuridesu.tech 'echo "${{ secrets.TOKEN }}" > /home/admin/${{ github.event.repository.name }}/tokens.json'
       - name: "Parse token"
