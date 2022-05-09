@@ -23,11 +23,7 @@ jobs:
         
       - name: "Update repository"
         run: ssh admin@kamuridesu.tech "rm -rf ${{ github.event.repository.name }}; git clone https://github.com/${{ github.repository }}.git"
-      - name: "Add token"
-        run: ssh admin@kamuridesu.tech 'echo "${{ secrets.TOKEN }}" > /home/admin/${{ github.event.repository.name }}/tokens.json; cat /home/admin/${{ github.event.repository.name }}/tokens.json > /home/admin/tokens.json'
-      - name: "Parse token"
-        run: ssh admin@kamuridesu.tech "cd ${{ github.event.repository.name }}; curl https://gist.githubusercontent.com/kamuridesu/970883ca8b505f8d96d80a794e9a612b/raw/8e05c60fa223f25377546ceba05450de12b5e6fe/pypelineJsonHelper.sh | bash"
       - name: "Build image"
         run: ssh admin@kamuridesu.tech "cd ${{ github.event.repository.name }} && sudo docker build -t ${{ github.repository }} ."
       - name: "Deploy new version"
-        run: ssh admin@kamuridesu.tech "sudo docker rm -f ${{ github.repository }}; sudo docker run --name ${{ github.repository }} --restart always -d ${{ github.repository }}"
+        run: ssh admin@kamuridesu.tech "sudo docker rm -f ${{ github.repository }}; sudo docker run --name ${{ github.event.repository.name }} --restart always -e TELEGRAM_BOT_TOKEN=${{ secrets.TOKEN }} -d ${{ github.repository }}"

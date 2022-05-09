@@ -1,3 +1,6 @@
+import json
+import os
+
 from aiogram import (
     Dispatcher,
     Bot,
@@ -10,7 +13,7 @@ from aiogram.types import (
     InlineKeyboardMarkup,
     InlineKeyboardButton
 )
-import json
+
 try:
     from src import Rule34Paheal
     from src import Logger, load
@@ -21,7 +24,7 @@ except:
     from .src import Luscious
 
 logger = Logger("bot.log")
-TOKEN = load("tokens.json")['TELEGRAM_BOT_TOKEN']
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
