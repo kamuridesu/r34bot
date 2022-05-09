@@ -22,13 +22,12 @@ jobs:
             SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
         
       - name: "Update repository"
-        run: ssh admin@kamuridesu.tech "rm -rf ${{ github.repository }}; git clone ${{ github.repositoryUrl }}"
+        run: ssh admin@kamuridesu.tech "rm -rf ${{ github.event.repository.name }}; git clone ${{ github.repositoryUrl }}"
       - name: "Add token"
-        run: ssh admin@kamuridesu.tech 'echo "${{ secrets.TOKEN }}" > /home/admin/${{ github.repository }}/tokens.json'
+        run: ssh admin@kamuridesu.tech 'echo "${{ secrets.TOKEN }}" > /home/admin/${{ github.event.repository.name }}/tokens.json'
       - name: "Parse token"
-        run: |
-          ssh admin@kamuridesu.tech "cd ${{ github.repository }}; curl https://gist.githubusercontent.com/kamuridesu/970883ca8b505f8d96d80a794e9a612b/raw/8e05c60fa223f25377546ceba05450de12b5e6fe/pypelineJsonHelper.sh | bash"
+        run: ssh admin@kamuridesu.tech "cd ${{ github.event.repository.name }}; curl https://gist.githubusercontent.com/kamuridesu/970883ca8b505f8d96d80a794e9a612b/raw/8e05c60fa223f25377546ceba05450de12b5e6fe/pypelineJsonHelper.sh | bash"
       - name: "Build image"
-        run: ssh admin@kamuridesu.tech "cd ${{ github.repository }} && sudo docker build -t ${{ github.repository }} ."
+        run: ssh admin@kamuridesu.tech "cd ${{ github.event.repository.name }} && sudo docker build -t ${{ github.repository }} ."
       - name: "Deploy new version"
-        run: ssh admin@kamuridesu.tech "sudo docker rm -f email-notifier; sudo docker run --name email-notifier --restart always -d email-notifier"
+        run: ssh admin@kamuridesu.tech "sudo docker rm -f ${{ github.repository }}; sudo docker run --name ${{ github.repository }} --restart always -d ${{ github.repository }}"
