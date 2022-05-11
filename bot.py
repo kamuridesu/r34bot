@@ -26,6 +26,7 @@ except:
 logger = Logger("bot.log")
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
+
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 r34 = Rule34Paheal()
@@ -102,13 +103,17 @@ async def luscious(message: types.Message):
                 logger.error("Erro ao baixar conteúdo da url " + image)
         await message.reply("OK!" if sending else "Não encontrado!")
     else:
-        results = l.get_albuns()
+        msg = await bot.send_message(chat_id, "Aguarde...")
+        results = l.get_n_albuns()
         kboard = InlineKeyboardMarkup(resize_keyboard=True)
         [kboard.add(InlineKeyboardButton(x.title,
                                          callback_data="{\"code\":0, \"id\": "
                                          + f"\"{x.id_}\"" + "}"))
          for x in results[1]
-         ]
+        ]
+        print(msg)
+        # await bot.edit_message_caption(chat_id, results[0], reply_markup=kboard)
+        # await bot.edit_message_reply_markup(reply_markup=kboard)
         await bot.send_message(chat_id, results[0], reply_markup=kboard)
 
 
@@ -117,7 +122,10 @@ async def sendSelected(chat_id, id_):
     album = l.fetch_from_id(id_)
     logger.info("Sending " + album.title)
     for image in album.pictures:
-        await bot.send_photo(chat_id, image, album.title)
+        try:
+            await bot.send_photo(chat_id, image, album.title)
+        except Exception:
+            await bot.send_message(chat_id, "Erro ao enviar imagem!")
 
 
 @dp.callback_query_handler(lambda call: call)

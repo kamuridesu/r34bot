@@ -16,9 +16,9 @@ class Luscious:
         if search_query != '':
             self.search(search_query, sorting, page, max_pages)
 
-    def get_results(self):
+    def get_results(self, results):
         message = "Results: \n"
-        for result in self.results:
+        for result in results:
             # print(result)
             msg = "\nID: " + result.id_
             msg += "\nTitle: " + result.title
@@ -29,7 +29,7 @@ class Luscious:
 
     def search(self, search_query: str, sorting: str = 'date_trending', page: int = 1, max_pages: int = 1) -> list[Album]:
         self.logger.info(f'Searching albums with keyword: {search_query} | Page: {page} | Max pages: {max_pages} | Sort: {sorting}')
-        self.results = album.search_albums(search_query, sorting, page, max_pages)[:self.max_resuts]
+        self.results = album.search_albums(search_query, sorting, page, max_pages)
         # [(result.fetch_info(), result.fetch_pictures()) for result in self.results]
         return self.results
 
@@ -44,8 +44,17 @@ class Luscious:
             "images": selected.pictures
         }
 
-    def get_albuns(self):
-        return (self.get_results(), self.results)
+    def get_albuns(self, quantity_per_iter=5):
+        y = []
+        for x in self.results:
+            y.append(x)
+            if len(y) == quantity_per_iter:
+                yield(self.get_results(y), y)
+                y = []
+        # return (self.get_results(), self.results)
+
+    def get_n_albuns(self, quantity=5):
+        return [x for x in self.get_albuns(quantity_per_iter=quantity)][0]
 
     def fetch_from_id(self, id_):
         album = Album(id_)
