@@ -56,6 +56,8 @@ async def start(message: types.Message):
 async def hentai(message: types.Message):
     query_args = argsparser(message.text.split(" ")[1:])
     query = query_args['query']
+    if query == "":
+        return await message.reply("Preciso de ao menos uma tag!")
     args = query_args['args']
     logger.info("Searching for " + query)
     sending = False
@@ -63,6 +65,12 @@ async def hentai(message: types.Message):
         args.update({"per_page": 1})
     if "pages" not in args:
         args.update({"pages": 1})
+    args.update({"random": False})
+    if "random" in args:
+        await message.reply("Ignoring other parameters and sending one random image")
+        args['pages'] = 1
+        args['per_page'] = 1
+        args['random'] = True
     k = r34.get_content(query, **args)
     for result in k:
         for x in result:

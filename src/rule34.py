@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-from typing import Generator
+from typing import Generator, Union
+import random
 try:
     from helpers import Logger
 except:
@@ -67,11 +68,13 @@ class Rule34Paheal:
             yield infos['content']
             actual_page += 1
 
-    def get_content(self, query: str, **kwargs) -> Generator[str, None, None]:
+    def get_content(self, query: str, **kwargs) -> Union[Generator[str, None, None], list[str]]:
         fetched_content = self.get_wpage(query, kwargs['pages'])
         per_page = int(kwargs['per_page'])
         content = []
         for x in fetched_content:
+            if kwargs['random']:
+                return random.choice(x)
             if len(x) < per_page:
                 per_page = len(x)
             for y in x:
