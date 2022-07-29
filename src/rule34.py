@@ -74,8 +74,9 @@ class Rule34Paheal:
         content = []
         for x in fetched_content:
             if kwargs['random']:
-                print(x)
-                return [random.choice(x)]
+                choice = random.choice(x)
+                yield [choice]
+                break
             if len(x) < per_page:
                 per_page = len(x)
             for y in x:

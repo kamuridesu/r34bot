@@ -65,21 +65,26 @@ async def hentai(message: types.Message):
         args.update({"per_page": 1})
     if "pages" not in args:
         args.update({"pages": 1})
-    args.update({"random": False})
+    if "random" not in args:
+        args.update({"random": False})
     if args['random'] is not False:
         await message.reply("Ignoring other parameters and sending one random image")
         args['pages'] = 1
         args['per_page'] = 1
         args['random'] = True
-    k = r34.get_content(query, **args)
-    for result in k:
-        print(result)
-        for x in result:
-            sending = True
-            try:
-                await bot.send_photo(message['chat']['id'], x['url'], x['tags'])
-            except Exception:
-                logger.error("Erro ao baixar conteúdo da url " + x['url'])
+    retry = True
+    while retry:
+        k = r34.get_content(query, **args)
+        for result in k:
+            for x in result:
+                sending = True
+                try:
+                    await bot.send_photo(message['chat']['id'], x['url'], x['tags'])
+                    retry = False
+                except Exception:
+                    logger.error("Erro ao baixar conteúdo da url " + x['url'])
+                    if args['random'] is False:
+                        retry = False
     await message.reply("OK!" if sending else "Não encontrado!")
 
 
