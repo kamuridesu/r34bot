@@ -66,13 +66,14 @@ async def hentai(message: types.Message):
     if "pages" not in args:
         args.update({"pages": 1})
     args.update({"random": False})
-    if "random" in args:
+    if args['random'] is not False:
         await message.reply("Ignoring other parameters and sending one random image")
         args['pages'] = 1
         args['per_page'] = 1
         args['random'] = True
     k = r34.get_content(query, **args)
     for result in k:
+        print(result)
         for x in result:
             sending = True
             try:
