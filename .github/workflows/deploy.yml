@@ -26,4 +26,4 @@ jobs:
       - name: "Build image"
         run: ssh admin@kamuridesu.tech "cd ${{ github.event.repository.name }} && sudo docker rm -f ${{ github.event.repository.name }} && sudo docker build -t ${{ github.repository }} ."
       - name: "Deploy new version"
-        run: ssh admin@kamuridesu.tech "sudo docker rm -f ${{ github.repository }}; sudo docker run --name ${{ github.event.repository.name }} --restart always -e TELEGRAM_BOT_TOKEN=${{ secrets.TOKEN }} --memory=40m -d ${{ github.repository }}"
+        run: ssh admin@kamuridesu.tech "sudo docker rm -f ${{ github.repository }}; sudo docker run --name ${{ github.event.repository.name }} --restart always -e TELEGRAM_BOT_TOKEN=${{ secrets.TOKEN }} --memory=70m -d ${{ github.repository }}"
