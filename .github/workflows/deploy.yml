@@ -4,7 +4,6 @@ jobs:
   deploy:
     name: "Deploy to aws"
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && 'refs/head/master'
     steps:
       - name: "Configure SSH key"
         run: |
